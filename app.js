@@ -2,6 +2,86 @@ const tagExpression = document.querySelector('textarea')
 const tagResult = document.querySelector('input')
 const display = document.querySelector('textarea')
 const result = document.querySelector('input')
+const panel = document.querySelector('.panel')
+
+const buttons =[
+    {
+        dataAtr: 'AC',
+        className: 'grey'
+    },
+    {
+        dataAtr: 'C',
+        className: 'grey'
+    },
+    {
+        dataAtr: '<',
+        className: 'grey'
+    },
+    {
+        dataAtr: '/',
+        className: 'yellow'
+    },
+    {
+        dataAtr: '7',
+        className: ''
+    },
+    {
+        dataAtr: '8',
+        className: ''
+    },
+    {
+        dataAtr: '9',
+        className: ''
+    },
+    {
+        dataAtr: '*',
+        className: 'yellow'
+    },
+    {
+        dataAtr: '4',
+        className: ''
+    },
+    {
+        dataAtr: '5',
+        className: ''
+    },
+    {
+        dataAtr: '6',
+        className: ''
+    },
+    {
+        dataAtr: '-',
+        className: 'yellow'
+    },
+    {
+        dataAtr: '1',
+        className: ''
+    },
+    {
+        dataAtr: '2',
+        className: ''
+    },
+    {
+        dataAtr: '3',
+        className: ''
+    },
+    {
+        dataAtr: '+',
+        className: 'yellow'
+    },
+    {
+        dataAtr: '0',
+        className: 'btn-big'
+    },
+    {
+        dataAtr: '.',
+        className: ''
+    },
+    {
+        dataAtr: '=',
+        className: 'yellow'
+    },
+]
 
 const calcState = {
     result: 0,
@@ -13,7 +93,12 @@ const calcState = {
     changeResult(){
         try{
             const newResult = eval(this.expression)
-            this.result = newResult
+            if (/^-?(0|[1-9]\d*)(\.[0-9]{1,8})?$/.test(newResult)){
+                this.result = newResult
+            }else {
+                this.result = newResult.toFixed(8)
+            }
+
         }catch (e){
             alert(`В выражении: ${this.expression} ошибка`)
             this.allClear()
@@ -45,9 +130,18 @@ const calcState = {
 display.innerText = calcState.expression
 result.value = calcState.result
 
-document.querySelectorAll('button').forEach( (button) => {
+buttons.forEach(btn => {
+    const button = document.createElement('button')
+    button.setAttribute('data-value', btn.dataAtr)
+    button.className = btn.className
     button.addEventListener('click', onButtonClick);
-});
+
+    const span = document.createElement('span')
+    span.textContent = btn.dataAtr
+
+    button.append(span)
+    panel.append(button)
+})
 
 function onButtonClick(e) {
     const value = e.currentTarget.dataset.value
